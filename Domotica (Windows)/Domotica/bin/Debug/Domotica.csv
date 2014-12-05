@@ -1,0 +1,11 @@
+Simulator.PLC5.Verlichting.lampBadkamerRead,154,184
+Simulator.PLC5.Verlichting.lampBergingRead,336,173
+Simulator.PLC5.Verlichting.lampHalRead,369,326
+Simulator.PLC5.Verlichting.lampKeukenRead,569,230
+Simulator.PLC5.Verlichting.lampLivingRead,594,417
+Simulator.PLC5.Verlichting.lampSlaapkamerRead,149,438
+Simulator.PLC5.Verlichting.lampWastafelRead,134,119
+Simulator.PLC5.Verlichting.lampWerkbladRead,539,124
+Simulator.PLC5.Verwarming.warmBadkamerBrandRead,41,204
+Simulator.PLC5.Verwarming.warmLivingBrandRead,599,500
+Simulator.PLC5.Verwarming.warmSlaapkamerBrandRead,43,417
