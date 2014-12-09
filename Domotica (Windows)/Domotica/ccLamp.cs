@@ -22,7 +22,7 @@ namespace Domotica
         private Ellipse ellGray;
         private Ellipse ellYellow;
         private static DispatcherTimer RefreshTimer = new DispatcherTimer();
-        private clsOPCNode _isaan;
+        private clsOPCNode _brandnode;
         private ucLampDetail _lampdetail;
         public override void OnApplyTemplate()
         {
@@ -34,12 +34,12 @@ namespace Domotica
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(ccLamp), new FrameworkPropertyMetadata(typeof(ccLamp)));
             RefreshTimer.Interval = TimeSpan.FromSeconds(1);
-            RefreshTimer.Start();
         }
-        public ccLamp(clsOPCNode isaan)
+        public ccLamp(clsOPCNode brandnode)
         {
-            this._isaan = isaan;
+            this._brandnode = brandnode;
             this._lampdetail = new ucLampDetail(this);
+            //ccEventhandlers
             this.Loaded += ccLamp_Loaded;
             RefreshTimer.Tick += Refresh_Tick;
         }
@@ -47,13 +47,14 @@ namespace Domotica
         {
             get { return _lampdetail; } 
         }
-        public Boolean IsAan
+        public Boolean Brand
         {
-            get { return (Boolean)_isaan.Value; }
-            set { _isaan.Value = value; }
+            get { return (Boolean)_brandnode.Value; }
+            set { _brandnode.Value = value; }
         }
         private void ccLamp_Loaded(object sender, RoutedEventArgs e)
         {
+            RefreshTimer.Start();
             WijzigLamp();
         }
         private void Refresh_Tick(object sender, EventArgs e)
@@ -65,7 +66,7 @@ namespace Domotica
             if (ellGray == null) return;
             DoubleAnimation animation = new DoubleAnimation();
             animation.From = ellGray.Opacity;
-            animation.To = (IsAan) ? 0 : 1;
+            animation.To = (Brand) ? 0 : 1;
             animation.Duration = new TimeSpan(0, 0, 0, 0, 500);
             Storyboard.SetTarget(animation, ellGray);
             Storyboard.SetTargetProperty(animation, new PropertyPath("Opacity"));
@@ -73,9 +74,9 @@ namespace Domotica
             storyboard.Children.Add(animation);
             storyboard.Begin(this);
         }
-        public void ToggleIsAan()
+        public void ToggleBrand()
         {
-            if (IsAan) { IsAan = false; } else { IsAan = true; } //IsAan = (IsAan) ? true : false;
+            if (Brand) { Brand = false; } else { Brand = true; } //IsAan = (IsAan) ? true : false;
         }
     }
 }

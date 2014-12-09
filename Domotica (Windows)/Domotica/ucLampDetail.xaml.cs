@@ -23,16 +23,16 @@ namespace Domotica
         static ucLampDetail()
         {
             RefreshTimer.Interval = TimeSpan.FromSeconds(1);
-            RefreshTimer.Start();
         }
         public ucLampDetail(ccLamp lamp)
         {
             InitializeComponent();
             this.Lamp = lamp;
-            this.Loaded += ucLampDetail_Loaded;
-            RefreshTimer.Tick += Refresh_Tick;
             //ucEventhandlers
-            chkIsAan.PreviewMouseUp += chkIsAan_PreviewMouseUp;
+            this.Loaded += ucLampDetail_Loaded;
+            this.Unloaded += ucLampDetail_Unloaded;
+            RefreshTimer.Tick += Refresh_Tick;
+            chkBrand.PreviewMouseUp += chkBrand_PreviewMouseUp;
         }
         public ccLamp Lamp
         {
@@ -41,15 +41,21 @@ namespace Domotica
         }
         private void ucLampDetail_Loaded(object sender, RoutedEventArgs e)
         {
+            RefreshTimer.Start();
             txtNaam.Text = Lamp.Name;
+            chkBrand.IsChecked = Lamp.Brand;
+        }
+        private void ucLampDetail_Unloaded(object sender, RoutedEventArgs e)
+        {
+            RefreshTimer.Stop();
         }
         private void Refresh_Tick(object sender, EventArgs e)
         {
-            chkIsAan.IsChecked = Lamp.IsAan;
+            chkBrand.IsChecked = Lamp.Brand;
         }
-        private void chkIsAan_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+        private void chkBrand_PreviewMouseUp(object sender, MouseButtonEventArgs e)
         {
-            Lamp.ToggleIsAan();
+            Lamp.ToggleBrand();
         }
     }
 }

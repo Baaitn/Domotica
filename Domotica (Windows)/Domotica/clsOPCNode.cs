@@ -67,7 +67,7 @@ namespace Domotica
             get
             {
                 if (!IsLeaf) return null;
-                object o = clsOPCServer._client.ReadItemValue(Environment.MachineName, _server.Server.ProgId, _node.ItemId);
+                object o = clsOPCServer._client.ReadItemValue(Environment.MachineName, _server.Server.ProgId, _node.ItemId, VarType.Empty, 0); //ValueAge is belangrijk! Erzonder worden waarden veranderd in KEPServer maar word de ingestelde waarde ook terug vervangen door de oude.
                 return o;
             }
             set
@@ -104,6 +104,23 @@ namespace Domotica
                     else
                     {
                         throw new Exception("Ongeldige waarde: " + value.ToString());
+                    }
+                    clsOPCServer._client.WriteItemValue(Environment.MachineName, _server.Server.ProgId, Truncate(_node.ItemId) + "Write", waarde);
+                }
+                else if (_ValueType == typeof(Int32))
+                {
+                    Int32 waarde;
+                    if (value.GetType() == typeof(Int32))
+                    {
+                        waarde = (Int32)value;
+                    }
+                    else if (value.GetType() == typeof(String))
+                    {
+                        waarde = Int32.Parse(value as String);
+                    }
+                    else
+                    {
+                        throw new Exception("Ongeldige waarde: " + value.ToString() + Environment.NewLine + "Geldige waarden gaan van −2,147,483,648 tot 2,147,483,647.");
                     }
                     clsOPCServer._client.WriteItemValue(Environment.MachineName, _server.Server.ProgId, Truncate(_node.ItemId) + "Write", waarde);
                 }

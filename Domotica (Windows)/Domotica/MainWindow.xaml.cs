@@ -2,6 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.ServiceModel;
+using System.ServiceModel.Description;
+using System.ServiceModel.Web;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -22,6 +25,7 @@ namespace Domotica
         public MainWindow()
         {
             InitializeComponent();
+            StartService();
         }
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
@@ -30,9 +34,9 @@ namespace Domotica
             {
                 cboOPCServers.Items.Add(server);
             }
-            foreach (clsOPCServer server in cboOPCServers.Items) //Automatisch selecteren van de kepserver, want klikken op items in een combobox is lastig ;)
+            foreach (clsOPCServer server in cboOPCServers.Items)
             {
-                if (server.ToString().Equals("Kepware.KEPServerEX.V5"))
+                if (server.ToString().Equals("Kepware.KEPServerEX.V5")) //Automatisch selecteren van de kepserver, want klikken op items in een combobox is lastig ;)
                 {
                     cboOPCServers.SelectedIndex = cboOPCServers.Items.IndexOf(server);
                 }
@@ -40,23 +44,24 @@ namespace Domotica
         }
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            List<clsOPCCSV> list = new List<clsOPCCSV>();
+            List<clsCSV> list = new List<clsCSV>();
             foreach (Control control in grdMain.Children.OfType<Control>())
             {
                 if (control is ccLamp || control is ccWarm)
                 {
                     TranslateTransform transform = control.RenderTransform as TranslateTransform;
-                    list.Add(new clsOPCCSV() { Id = (String)control.Tag, X = transform.X, Y = transform.Y });
+                    list.Add(new clsCSV() { Id = (String)control.Tag, X = transform.X, Y = transform.Y });
                 }
             }
-            clsOPCCSV.SaveCSV("Domotica.csv", list);
+            clsCSV.Write("Domotica.csv", list);
         }
         private void cboOPCServers_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             clsOPCServer server = (clsOPCServer)cboOPCServers.SelectedItem;
+            clsOPCServer.GekozenServer = server;
             foreach (clsOPCNode node in server.GetOPCNodes())
             {
-                //clsOPCTRVNode trvnode = new clsOPCTRVNode(node);
+                clsTRVNode trvnode = new clsTRVNode(node);
                 //trvOPCNodes.Items.Add(trvnode);
                 ToonControls(node);
             }
@@ -77,7 +82,7 @@ namespace Domotica
                     if ((clsOPCNodes[0] != null) & (clsOPCNodes[1] != null) & (clsOPCNodes[2] != null) & (clsOPCNodes[3] != null))
                     {
                         ToonWarm(clsOPCNodes[0], clsOPCNodes[1], clsOPCNodes[2], clsOPCNodes[3]);
-                        clsOPCNodes = new clsOPCNode[4];
+                        clsOPCNodes = new clsOPCNode[clsOPCNodes.Length];
                     }
                 }
             }
@@ -97,6 +102,7 @@ namespace Domotica
             lamp.Tag = node.ItemId; //Een 2de plaats in een control waar je 'iets' kan opslaan, dit kan gelijk welk type zijn. Nu wordt het .ItemId van een node ingevuld om zo een unieke naam te krijgen bij het opslaan van posities.
             lamp.Width = 20;
             lamp.Height = 20;
+            lamp.Focusable = false;
             lamp.MouseDown += ToonLampDetails;
             lamp.SetValue(Grid.RowProperty, 1);
             lamp.SetValue(Grid.ColumnProperty, 0);
@@ -106,7 +112,7 @@ namespace Domotica
             lamp.RenderTransform = new TranslateTransform();
             MouseDragElementBehavior behavior = new MouseDragElementBehavior();
             behavior.Attach(lamp);
-            clsOPCCSV csvdata = clsOPCCSV.ReadCSV("Domotica.csv", node.ItemId);
+            clsCSV csvdata = clsCSV.Read("Domotica.csv", node.ItemId);
             if (csvdata != null)
             {
                 TranslateTransform transform = lamp.RenderTransform as TranslateTransform;
@@ -121,15 +127,16 @@ namespace Domotica
             if (lamp == null) return;
             grdDetails.Children.Add(lamp.LampDetail);
         }
-        private void ToonWarm(clsOPCNode isaannode, clsOPCNode isautonode, clsOPCNode tgewenstnode, clsOPCNode thuidignode)
+        private void ToonWarm(clsOPCNode brandnode, clsOPCNode autonode, clsOPCNode gewenstnode, clsOPCNode huidignode)
         {
-            ccWarm warm = new ccWarm(isaannode, isautonode, tgewenstnode, thuidignode);
+            ccWarm warm = new ccWarm(brandnode, autonode, gewenstnode, huidignode);
             grdMain.Children.Add(warm);
-            String Name = Truncate(isaannode.Name); //Als basis van de naam gebruiken we de .Name van isaannode waar we de pre & suffix van verwijderen, de overschot bevat echter ook nog de suffix 'Brand'.
+            String Name = Truncate(brandnode.Name); //Als basis van de naam gebruiken we de .Name van de brandnode waar we de pre & suffix van verwijderen, de overschot bevat echter ook nog 'Brand'.
             warm.Name = Name.Substring(0, Name.Length - 5); //Om ook deze 'Brand' weg te halen maken we nog een subselectie.
-            warm.Tag = isaannode.ItemId; //Aangezien er maar 1 control geplaatst wordt, kan de .ItemId van de isaannode gebruikt bij het opslaan en laden van posities. Alle nodes van een verwarming zitten samen. 
+            warm.Tag = brandnode.ItemId; //Aangezien er maar 1 control geplaatst wordt, kan de .ItemId van de brandnode gebruikt bij het opslaan en laden van posities. Alle nodes van een verwarming zitten toch samen. 
             warm.Width = 20;
             warm.Height = 20;
+            warm.Focusable = false;
             warm.MouseDown += ToonWarmDetails;
             warm.SetValue(Grid.RowProperty, 1);
             warm.SetValue(Grid.ColumnProperty, 0);
@@ -139,7 +146,7 @@ namespace Domotica
             warm.RenderTransform = new TranslateTransform();
             MouseDragElementBehavior behavior = new MouseDragElementBehavior();
             behavior.Attach(warm);
-            clsOPCCSV csvdata = clsOPCCSV.ReadCSV("Domotica.csv", isaannode.ItemId);
+            clsCSV csvdata = clsCSV.Read("Domotica.csv", brandnode.ItemId);
             if (csvdata != null)
             {
                 TranslateTransform transform = warm.RenderTransform as TranslateTransform;
@@ -176,6 +183,14 @@ namespace Domotica
             }
             //Return wat overblijft
             return text;
+        }
+        private void StartService() {
+            Uri address = new Uri(@"http://localhost:9000/");
+            WebServiceHost host = new WebServiceHost(typeof(DomoticaService), address);
+            ServiceEndpoint endpoint = host.AddServiceEndpoint(typeof(IDomoticaService), new WebHttpBinding(), "");
+            ServiceDebugBehavior debugbehavior = host.Description.Behaviors.Find<ServiceDebugBehavior>();
+            debugbehavior.HttpHelpPageEnabled = false;
+            host.Open(); //Visual Studio starten als administrator is noodzakelijk!
         }
     }
 }

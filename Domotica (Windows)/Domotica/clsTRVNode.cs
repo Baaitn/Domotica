@@ -7,10 +7,10 @@ using System.Windows.Controls;
 
 namespace Domotica
 {
-    public class clsOPCTRVNode : TreeViewItem
+    public class clsTRVNode : TreeViewItem
     {
         private clsOPCNode _node;
-        public clsOPCTRVNode(clsOPCNode node)
+        public clsTRVNode(clsOPCNode node)
         {
             this._node = node;
             this.Header = node.ToString();
@@ -20,7 +20,7 @@ namespace Domotica
         {
             foreach (clsOPCNode node in _node.GetOPCNodes())
             {
-                this.Items.Add(new clsOPCTRVNode(node));
+                this.Items.Add(new clsTRVNode(node));
             }
         }
     }

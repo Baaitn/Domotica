@@ -23,18 +23,18 @@ namespace Domotica
         static ucWarmDetail()
         {
             RefreshTimer.Interval = TimeSpan.FromSeconds(1);
-            RefreshTimer.Start();
         }
         public ucWarmDetail(ccWarm warm)
         {
             InitializeComponent();
             this.Warm = warm;
-            this.Loaded += ucWarmDetail_Loaded;
-            RefreshTimer.Tick += Refresh_Tick;
             //ucEventhandlers
-            chkIsAan.PreviewMouseUp += chkIsAan_PreviewMouseUp;
-            chkIsAuto.PreviewMouseUp += chkIsAuto_PreviewMouseUp;
-            txtTGewenst.TextChanged += txtTGewenst_TextChanged;
+            this.Loaded += ucWarmDetail_Loaded;
+            this.Unloaded += ucWarmDetail_Unloaded;
+            RefreshTimer.Tick += Refresh_Tick;
+            chkBrand.PreviewMouseUp += chkBrand_PreviewMouseUp;
+            chkAuto.PreviewMouseUp += chkAuto_PreviewMouseUp;
+            txtGewenst.TextChanged += txtGewenst_TextChanged;
         }
         public ccWarm Warm
         {
@@ -43,28 +43,38 @@ namespace Domotica
         }
         private void ucWarmDetail_Loaded(object sender, RoutedEventArgs e)
         {
+            RefreshTimer.Start();
             txtNaam.Text = Warm.Name;
+            chkBrand.IsChecked = _warm.Brand;
+            chkAuto.IsChecked = _warm.Auto;
+            txtGewenst.Text = _warm.Gewenst.ToString();
+            txtHuidig.Text = _warm.Huidig.ToString();
+        }
+        private void ucWarmDetail_Unloaded(object sender, RoutedEventArgs e)
+        {
+            RefreshTimer.Stop();
         }
         private void Refresh_Tick(object sender, EventArgs e)
         {
-            chkIsAan.IsChecked = _warm.IsAan;
-            chkIsAuto.IsChecked = _warm.IsAuto;
-            if (!txtTGewenst.IsFocused) { txtTGewenst.Text = _warm.TGewenst.ToString(); }
-            txtTHuidig.Text = _warm.THuidig.ToString();
+            Console.WriteLine("Tick on " + DateTime.Now + " @ warmDetail" + Warm.Name); //TODO: Hoe tick enkel laten gebeuren op active detailcontrol?
+            chkBrand.IsChecked = _warm.Brand;
+            chkAuto.IsChecked = _warm.Auto;
+            if (!txtGewenst.IsFocused) { txtGewenst.Text = _warm.Gewenst.ToString(); }
+            txtHuidig.Text = _warm.Huidig.ToString();
         }
-        private void chkIsAan_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+        private void chkBrand_PreviewMouseUp(object sender, MouseButtonEventArgs e)
         {
-            Warm.ToggleIsAan();
+            Warm.ToggleBrand();
         }
-        private void chkIsAuto_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+        private void chkAuto_PreviewMouseUp(object sender, MouseButtonEventArgs e)
         {
-            Warm.ToggleIsAuto();
+            Warm.ToggleAuto();
         }
-        private void txtTGewenst_TextChanged(object sender, TextChangedEventArgs e)
+        private void txtGewenst_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (!String.IsNullOrWhiteSpace(txtTGewenst.Text))
+            if (!String.IsNullOrWhiteSpace(txtGewenst.Text))
             {
-                Warm.ChangeTGewenst(Convert.ToDouble(txtTGewenst.Text.ToString()));
+                Warm.ChangeGewenst(Convert.ToDouble(txtGewenst.Text.ToString()));
             }
         }
     }

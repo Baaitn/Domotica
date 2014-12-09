@@ -10,6 +10,6 @@
         <Label HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,41,0,0" Width="80" Content="Naam:" HorizontalContentAlignment="Right"/>
         <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Margin="95,46,0,0" Width="195" Name="txtNaam" TextWrapping="Wrap" Text="Node.Name"/>
         <Label HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,72,0,0" Width="80" Content="Brand:" HorizontalContentAlignment="Right"/>
-        <CheckBox HorizontalAlignment="Left" VerticalAlignment="Top" Margin="95,78,0,0" Width="195" Name="chkIsAan" Content="Aan/Uit"/>
+        <CheckBox HorizontalAlignment="Left" VerticalAlignment="Top" Margin="95,78,0,0" Width="195" Name="chkBrand" Content="Aan/Uit"/>
     </Grid>
 </UserControl>

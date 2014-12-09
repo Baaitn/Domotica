@@ -22,10 +22,10 @@ namespace Domotica
         private Rectangle rctGray;
         private Rectangle rctRed;
         private static DispatcherTimer RefreshTimer = new DispatcherTimer();
-        private clsOPCNode _isaan;
-        private clsOPCNode _isauto;
-        private clsOPCNode _tgewenst;
-        private clsOPCNode _thuidig;
+        private clsOPCNode _brandnode;
+        private clsOPCNode _autonode;
+        private clsOPCNode _gewenstnode;
+        private clsOPCNode _huidignode;
         private ucWarmDetail _warmdetail;
         public override void OnApplyTemplate()
         {
@@ -37,15 +37,15 @@ namespace Domotica
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(ccWarm), new FrameworkPropertyMetadata(typeof(ccWarm)));
             RefreshTimer.Interval = TimeSpan.FromSeconds(1);
-            RefreshTimer.Start();
         }
-        public ccWarm(clsOPCNode isaan, clsOPCNode isauto, clsOPCNode tgewenst, clsOPCNode thuidig)
+        public ccWarm(clsOPCNode brandnode, clsOPCNode autonode, clsOPCNode gewenstnode, clsOPCNode huidignode)
         {
-            this._isaan = isaan;
-            this._isauto = isauto;
-            this._tgewenst = tgewenst;
-            this._thuidig = thuidig;
+            this._brandnode = brandnode;
+            this._autonode = autonode;
+            this._gewenstnode = gewenstnode;
+            this._huidignode = huidignode;
             this._warmdetail = new ucWarmDetail(this);
+            //ccEventhandlers
             this.Loaded += ccWarm_Loaded;
             RefreshTimer.Tick += Refresh_Tick;
         }
@@ -53,28 +53,29 @@ namespace Domotica
         {
             get { return _warmdetail; } 
         }
-        public Boolean IsAan
+        public Boolean Brand
         {
-            get { return (Boolean)_isaan.Value; }
-            set { _isaan.Value = value; }
+            get { return (Boolean)_brandnode.Value; }
+            set { _brandnode.Value = value; }
         }
-        public Boolean IsAuto
+        public Boolean Auto
         {
-            get { return (Boolean)_isauto.Value; }
-            set { _isauto.Value = value; }
+            get { return (Boolean)_autonode.Value; }
+            set { _autonode.Value = value; }
         }
-        public Double TGewenst
+        public Double Gewenst
         {
-            get { return (Double)_tgewenst.Value; }
-            set { _tgewenst.Value = value; }
+            get { return (Double)_gewenstnode.Value; }
+            set { _gewenstnode.Value = value; }
         }
-        public Double THuidig
+        public Double Huidig
         {
-            get { return (Double)_thuidig.Value; }
-            set { _thuidig.Value = value; }
+            get { return (Double)_huidignode.Value; }
+            set { _huidignode.Value = value; }
         }
         private void ccWarm_Loaded(object sender, RoutedEventArgs e)
         {
+            RefreshTimer.Start();
             WijzigWarm();
         }
         private void Refresh_Tick(object sender, EventArgs e)
@@ -86,7 +87,7 @@ namespace Domotica
             if (rctGray == null) return;
             DoubleAnimation animation = new DoubleAnimation();
             animation.From = rctGray.Opacity;
-            animation.To = (IsAan) ? 0 : 1;
+            animation.To = (Brand) ? 0 : 1;
             animation.Duration = new TimeSpan(0, 0, 0, 0, 500);
             Storyboard.SetTarget(animation, rctGray);
             Storyboard.SetTargetProperty(animation, new PropertyPath("Opacity"));
@@ -94,17 +95,17 @@ namespace Domotica
             storyboard.Children.Add(animation);
             storyboard.Begin(this);
         }
-        public void ToggleIsAan()
+        public void ToggleBrand()
         {
-            if (IsAan) { IsAan = false; } else { IsAan = true; }
+            if (Brand) { Brand = false; } else { Brand = true; }
         }
-        public void ToggleIsAuto()
+        public void ToggleAuto()
         {
-            if (IsAuto) { IsAuto = false; } else { IsAuto = true; }
+            if (Auto) { Auto = false; } else { Auto = true; }
         }
-        public void ChangeTGewenst(Double value)
+        public void ChangeGewenst(Double value)
         {
-            TGewenst = value;
+            Gewenst = value;
         }
     }
 }
