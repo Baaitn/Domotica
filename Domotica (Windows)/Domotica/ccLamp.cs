@@ -39,7 +39,7 @@ namespace Domotica
         {
             this._brandnode = brandnode;
             this._lampdetail = new ucLampDetail(this);
-            //ccEventhandlers
+            //ccEvents
             this.Loaded += ccLamp_Loaded;
             RefreshTimer.Tick += Refresh_Tick;
         }

@@ -66,7 +66,7 @@ namespace Domotica
         {
             if (node.IsLeaf)
             {
-                list.Add(new clsWCFNode() { ItemId = node.ItemId });
+                list.Add(new clsWCFNode() { ItemId = node.ItemId, Name = node.Name, Value = node.Value });
             }
             else
             {

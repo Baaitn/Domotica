@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Principal;
 using System.ServiceModel;
 using System.ServiceModel.Description;
 using System.ServiceModel.Web;
@@ -25,7 +26,16 @@ namespace Domotica
         public MainWindow()
         {
             InitializeComponent();
-            StartService();
+            WindowsPrincipal principal = new WindowsPrincipal(WindowsIdentity.GetCurrent());
+            if (principal.IsInRole(WindowsBuiltInRole.Administrator))
+            {
+                Title = "Domotica (RESTService: Enabled)";
+                StartService();
+            }
+            else
+            {
+                Title = "Domotica (RESTService: Disabled)";
+            }
         }
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
@@ -112,12 +122,12 @@ namespace Domotica
             lamp.RenderTransform = new TranslateTransform();
             MouseDragElementBehavior behavior = new MouseDragElementBehavior();
             behavior.Attach(lamp);
-            clsCSV csvdata = clsCSV.Read("Domotica.csv", node.ItemId);
-            if (csvdata != null)
+            clsCSV data = clsCSV.Read("Domotica.csv", node.ItemId);
+            if (data != null)
             {
                 TranslateTransform transform = lamp.RenderTransform as TranslateTransform;
-                transform.X = csvdata.X;
-                transform.Y = csvdata.Y;
+                transform.X = data.X;
+                transform.Y = data.Y;
             }
         }
         private void ToonLampDetails(object sender, MouseButtonEventArgs e)
@@ -146,12 +156,12 @@ namespace Domotica
             warm.RenderTransform = new TranslateTransform();
             MouseDragElementBehavior behavior = new MouseDragElementBehavior();
             behavior.Attach(warm);
-            clsCSV csvdata = clsCSV.Read("Domotica.csv", brandnode.ItemId);
-            if (csvdata != null)
+            clsCSV data = clsCSV.Read("Domotica.csv", brandnode.ItemId);
+            if (data != null)
             {
                 TranslateTransform transform = warm.RenderTransform as TranslateTransform;
-                transform.X = csvdata.X;
-                transform.Y = csvdata.Y;
+                transform.X = data.X;
+                transform.Y = data.Y;
             }
         }
         private void ToonWarmDetails(object sender, MouseButtonEventArgs e)
@@ -190,7 +200,7 @@ namespace Domotica
             ServiceEndpoint endpoint = host.AddServiceEndpoint(typeof(IDomoticaService), new WebHttpBinding(), "");
             ServiceDebugBehavior debugbehavior = host.Description.Behaviors.Find<ServiceDebugBehavior>();
             debugbehavior.HttpHelpPageEnabled = false;
-            host.Open(); //Visual Studio starten als administrator is noodzakelijk!
+            host.Open(); //Visual Studio moet gestart zijn als administrator om de RESTService te kunnen gebruiken!
         }
     }
 }

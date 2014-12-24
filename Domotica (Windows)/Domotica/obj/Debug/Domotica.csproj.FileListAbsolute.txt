@@ -122,4 +122,3 @@ C:\Users\Bert\Documents\School\2014 - 2015\Domotica\Software\Domotica (Windows)\
 C:\Users\Bert\Documents\School\2014 - 2015\Domotica\Software\Domotica (Windows)\Domotica\obj\Debug\Domotica.g.resources
 C:\Users\Bert\Documents\School\2014 - 2015\Domotica\Software\Domotica (Windows)\Domotica\obj\Debug\Domotica.Properties.Resources.resources
 C:\Users\Bert\Documents\School\2014 - 2015\Domotica\Software\Domotica (Windows)\Domotica\obj\Debug\Domotica.csproj.GenerateResource.Cache
-C:\Users\Bert\Documents\School\2014 - 2015\Domotica\Software\Domotica (Windows)\Domotica\obj\Debug\Domotica.csprojResolveAssemblyReference.cache

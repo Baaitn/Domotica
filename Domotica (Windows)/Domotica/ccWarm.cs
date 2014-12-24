@@ -45,7 +45,7 @@ namespace Domotica
             this._gewenstnode = gewenstnode;
             this._huidignode = huidignode;
             this._warmdetail = new ucWarmDetail(this);
-            //ccEventhandlers
+            //ccEvents
             this.Loaded += ccWarm_Loaded;
             RefreshTimer.Tick += Refresh_Tick;
         }

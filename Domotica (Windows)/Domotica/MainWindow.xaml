@@ -12,10 +12,10 @@
 		</Grid.RowDefinitions>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="7*"/>
-			<ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="3*"/>
 		</Grid.ColumnDefinitions>
 		<Label HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0" Width="46" Height="26" Grid.Row="0" Grid.Column="0" Content="Server:"/>
-        <ComboBox HorizontalAlignment="Left" VerticalAlignment="Top" Margin="61,12,0,0" Width="1201" Height="22" Grid.Row="0" Grid.ColumnSpan="2" x:Name="cboOPCServers" SelectionChanged="cboOPCServers_SelectionChanged" Focusable="False"/>
+        <ComboBox HorizontalAlignment="Left" VerticalAlignment="Top" Margin="61,12,0,0" Width="1201" Height="22" Grid.Row="0" Grid.ColumnSpan="2" x:Name="cboOPCServers" SelectionChanged="cboOPCServers_SelectionChanged" Focusable="False" IsEnabled="False"/>
 		<Image HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0" Width="870" Height="703" Grid.Row="1" Grid.Column="0" Source="Images/Plan01.jpg"/>
 		<Grid HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0" Width="362" Height="703" Grid.Row="1" Grid.Column="1" x:Name="grdDetails"/>
 		<TreeView HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0" Width="870" Height="703" Grid.Row="1" Grid.Column="0" x:Name="trvOPCNodes" BorderThickness="0" Background="{x:Null}" Focusable="False"/>

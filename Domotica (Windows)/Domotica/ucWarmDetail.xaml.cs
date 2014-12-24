@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,7 +29,7 @@ namespace Domotica
         {
             InitializeComponent();
             this.Warm = warm;
-            //ucEventhandlers
+            //ucEvents
             this.Loaded += ucWarmDetail_Loaded;
             this.Unloaded += ucWarmDetail_Unloaded;
             RefreshTimer.Tick += Refresh_Tick;
@@ -56,11 +57,13 @@ namespace Domotica
         }
         private void Refresh_Tick(object sender, EventArgs e)
         {
-            Console.WriteLine("Tick on " + DateTime.Now + " @ warmDetail" + Warm.Name); //TODO: Hoe tick enkel laten gebeuren op active detailcontrol?
-            chkBrand.IsChecked = _warm.Brand;
-            chkAuto.IsChecked = _warm.Auto;
-            if (!txtGewenst.IsFocused) { txtGewenst.Text = _warm.Gewenst.ToString(); }
-            txtHuidig.Text = _warm.Huidig.ToString();
+            if (IsLoaded)
+            {
+                chkBrand.IsChecked = _warm.Brand;
+                chkAuto.IsChecked = _warm.Auto;
+                if (!txtGewenst.IsFocused) { txtGewenst.Text = _warm.Gewenst.ToString(); }
+                txtHuidig.Text = _warm.Huidig.ToString();
+            }
         }
         private void chkBrand_PreviewMouseUp(object sender, MouseButtonEventArgs e)
         {
@@ -74,7 +77,7 @@ namespace Domotica
         {
             if (!String.IsNullOrWhiteSpace(txtGewenst.Text))
             {
-                Warm.ChangeGewenst(Convert.ToDouble(txtGewenst.Text.ToString()));
+                Warm.ChangeGewenst(Convert.ToDouble(txtGewenst.Text.ToString(), new NumberFormatInfo())); //Convert.ToDouble() wil een provider nu dat er binding wordt toegepast
             }
         }
     }

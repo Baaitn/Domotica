@@ -8,5 +8,7 @@ namespace Domotica
     public class clsWCFNode
     {
         public string ItemId { get; set; }
+        public string Name { get; set; }
+        public object Value { get; set; }
     }
 }

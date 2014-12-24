@@ -67,7 +67,7 @@ namespace Domotica
             get
             {
                 if (!IsLeaf) return null;
-                object o = clsOPCServer._client.ReadItemValue(Environment.MachineName, _server.Server.ProgId, _node.ItemId, VarType.Empty, 0); //ValueAge is belangrijk! Erzonder worden waarden veranderd in KEPServer maar word de ingestelde waarde ook terug vervangen door de oude.
+                object o = clsOPCServer._client.ReadItemValue(Environment.MachineName, _server.Server.ProgId, _node.ItemId, VarType.Empty, 1); //ValueAge is belangrijk! Erzonder worden waarden veranderd in KEPServer maar word de ingestelde waarde ook terug vervangen door de oude.
                 return o;
             }
             set

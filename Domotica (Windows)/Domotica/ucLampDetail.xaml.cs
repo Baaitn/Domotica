@@ -28,7 +28,7 @@ namespace Domotica
         {
             InitializeComponent();
             this.Lamp = lamp;
-            //ucEventhandlers
+            //ucEvents
             this.Loaded += ucLampDetail_Loaded;
             this.Unloaded += ucLampDetail_Unloaded;
             RefreshTimer.Tick += Refresh_Tick;
@@ -51,7 +51,10 @@ namespace Domotica
         }
         private void Refresh_Tick(object sender, EventArgs e)
         {
-            chkBrand.IsChecked = Lamp.Brand;
+            if (IsLoaded)
+            {
+                chkBrand.IsChecked = Lamp.Brand;
+            }
         }
         private void chkBrand_PreviewMouseUp(object sender, MouseButtonEventArgs e)
         {

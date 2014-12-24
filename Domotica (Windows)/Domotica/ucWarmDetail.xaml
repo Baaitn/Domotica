@@ -6,16 +6,23 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
     mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <Label HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0" Width="280" Content="Verwarming" HorizontalContentAlignment="Center"/>
-        <Label HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,41,0,0" Width="80" Content="Naam:" HorizontalContentAlignment="Right"/>
-        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Margin="95,46,0,0" Width="195" x:Name="txtNaam" TextWrapping="Wrap" Text="Node.Name"/>
-        <Label HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,72,0,0" Width="80" Content="Brand:" HorizontalContentAlignment="Right"/>
+        <Label HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0" Width="280" HorizontalContentAlignment="Center" Content="Verwarming"/>
+        <!--Naam-->
+        <Label HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,41,0,0" Width="80" HorizontalContentAlignment="Right" Content="Naam:"/>
+        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Margin="95,46,0,0" Width="195" x:Name="txtNaam" Text="Node.Name" TextWrapping="Wrap"/>
+        <!--Brand-->
+        <Label HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,72,0,0" Width="80" HorizontalContentAlignment="Right" Content="Brand:"/>
         <CheckBox HorizontalAlignment="Left" VerticalAlignment="Top" Margin="95,78,0,0" Width="195" x:Name="chkBrand" Content="Aan/Uit" />
-        <Label HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,103,0,0" Width="80" Content="Auto:" HorizontalContentAlignment="Right"/>
+        <!--Auto-->
+        <Label HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,103,0,0" Width="80" HorizontalContentAlignment="Right" Content="Auto:"/>
         <CheckBox HorizontalAlignment="Left" VerticalAlignment="Top" Margin="95,109,0,0" Width="195" x:Name="chkAuto" Content="Aan/Uit"/>
-        <Label HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,134,0,0" Width="80" Content="Gewenst:" HorizontalContentAlignment="Right"/>
-        <TextBox HorizontalAlignment="Left" VerticalAlignment="Top" Margin="95,139,0,0" Width="195" x:Name="txtGewenst" TextWrapping="Wrap" Text="T°" BorderThickness="0"/>
-        <Label HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,165,0,0" Width="80" Content="Huidig:" HorizontalContentAlignment="Right"/>
-        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Margin="95,170,0,0" Width="195" x:Name="txtHuidig" TextWrapping="Wrap" Text="T°"/>
+        <!--Gewenst-->
+        <Label HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,134,0,0" Width="80" HorizontalContentAlignment="Right" Content="Gewenst:"/>
+        <Slider HorizontalAlignment="Left" VerticalAlignment="Top" Margin="95,139,0,0" Width="160" x:Name="sldrGewenst" Value="{Binding Text, ElementName=txtGewenst}" Maximum="50"/>
+        <TextBox HorizontalAlignment="Left" VerticalAlignment="Top" Margin="260,139,0,0" Width="30" x:Name="txtGewenst" Text="{Binding Value, ElementName=sldrGewenst, StringFormat=\{0:F0\}}" TextWrapping="NoWrap" BorderThickness="0"/>
+        <!--Huidig-->
+        <Label HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,165,0,0" Width="80" HorizontalContentAlignment="Right" Content="Huidig:"/>
+        <Slider HorizontalAlignment="Left" VerticalAlignment="Top" Margin="95,170,0,0" Width="160" x:Name="sldrHuidig" Value="{Binding Text, ElementName=txtHuidig}" Maximum="50" IsEnabled="False"/>
+        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Margin="260,170,0,0" Width="30" x:Name="txtHuidig" Text="{Binding Value, ElementName=sldrHuidig, StringFormat=\{0:F0\}}" TextWrapping="NoWrap"/>       
     </Grid>
 </UserControl>
